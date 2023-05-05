@@ -1,6 +1,6 @@
 # The first rule is executed when the
 # command make is typed in the local folder:
-all: journey lspath lspath_opt neighbours aloof
+all: journey lspath neighbours aloof
 
 # executable deps and command to build it:
 journey: run.o hashset.o quicksort.o
@@ -22,13 +22,6 @@ lspath: longestshortest.o
 
 longestshortest.o: longestshortest.c global.h
 	clang -Ofast -c longestshortest.c -o longestshortest.o
-
-# executable deps and command to build it:
-lspath_opt: longestshortest_opt.o
-	clang -O3 longestshortest_opt.o -o lspath_opt
-
-longestshortest_opt.o: longestshortest_opt.c global.h
-	clang -O3 -c longestshortest_opt.c -o longestshortest_opt.o
 
 # executable deps and command to build it:
 neighbours: neighbours.o hashset.o
