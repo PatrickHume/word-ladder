@@ -1,0 +1,271 @@
+(base) PatrickHume:WordJourney patrickhume$ ./lspath
+
+--------Initial Pass--------
+0 
+these -> there dist: 1
+where -> there dist: 1
+could -> would dist: 1
+world -> would dist: 1
+there -> these dist: 1
+those -> these dist: 1
+50 
+would -> could dist: 1
+white -> write dist: 1
+later -> water dist: 1
+100 
+there -> where dist: 1
+might -> right dist: 1
+night -> right dist: 1
+light -> right dist: 1
+thing -> think dist: 1
+150 
+found -> sound dist: 1
+round -> sound dist: 1
+shall -> small dist: 1
+200 
+sound -> found dist: 1
+round -> found dist: 1
+these -> those dist: 1
+whose -> those dist: 1
+right -> might dist: 1
+night -> might dist: 1
+light -> might dist: 1
+whole -> while dist: 1
+white -> while dist: 1
+horse -> house dist: 1
+250 
+would -> world dist: 1
+doing -> going dist: 1
+300 
+among -> along dist: 1
+small -> shall dist: 1
+bring -> being dist: 1
+350 
+right -> night dist: 1
+might -> night dist: 1
+light -> night dist: 1
+right -> light dist: 1
+might -> light dist: 1
+night -> light dist: 1
+400 
+heart -> heard dist: 1
+while -> whole dist: 1
+whose -> whole dist: 1
+450 
+write -> white dist: 1
+while -> white dist: 1
+think -> thing dist: 1
+500 
+water -> later dist: 1
+550 
+along -> among dist: 1
+600 
+shows -> shown dist: 1
+650 
+700 
+750 
+heard -> heart dist: 1
+being -> bring dist: 1
+sound -> round dist: 1
+found -> round dist: 1
+800 
+house -> horse dist: 1
+shown -> shows dist: 1
+850 
+those -> whose dist: 1
+whole -> whose dist: 1
+900 
+950 
+going -> doing dist: 1
+0
+these -> where dist: ∞ -> 2      from these -> there dist: 1      to there -> where dist: 1
+where -> these dist: ∞ -> 2      from where -> there dist: 1      to there -> these dist: 1
+10
+20
+30
+could -> world dist: ∞ -> 2      from could -> would dist: 1      to would -> world dist: 1
+world -> could dist: ∞ -> 2      from world -> would dist: 1      to would -> could dist: 1
+40
+there -> those dist: ∞ -> 2      from there -> these dist: 1      to these -> those dist: 1
+where -> those dist: ∞ -> 3      from where -> these dist: 2      to these -> those dist: 1
+those -> there dist: ∞ -> 2      from those -> these dist: 1      to these -> there dist: 1
+those -> where dist: ∞ -> 3      from those -> these dist: 1      to these -> where dist: 2
+50
+60
+70
+80
+90
+100
+110
+120
+130
+140
+150
+160
+170
+180
+190
+200
+there -> whose dist: ∞ -> 3      from there -> those dist: 2      to those -> whose dist: 1
+these -> whose dist: ∞ -> 2      from these -> those dist: 1      to those -> whose dist: 1
+where -> whose dist: ∞ -> 4      from where -> those dist: 3      to those -> whose dist: 1
+whose -> there dist: ∞ -> 3      from whose -> those dist: 1      to those -> there dist: 2
+whose -> these dist: ∞ -> 2      from whose -> those dist: 1      to those -> these dist: 1
+whose -> where dist: ∞ -> 4      from whose -> those dist: 1      to those -> where dist: 3
+210
+220
+230
+240
+whole -> white dist: ∞ -> 2      from whole -> while dist: 1      to while -> white dist: 1
+white -> whole dist: ∞ -> 2      from white -> while dist: 1      to while -> whole dist: 1
+250
+260
+270
+280
+290
+300
+310
+320
+330
+340
+350
+360
+370
+380
+390
+400
+410
+420
+430
+440
+while -> whose dist: ∞ -> 2      from while -> whole dist: 1      to whole -> whose dist: 1
+white -> whose dist: ∞ -> 3      from white -> whole dist: 2      to whole -> whose dist: 1
+whose -> while dist: ∞ -> 2      from whose -> whole dist: 1      to whole -> while dist: 1
+whose -> white dist: ∞ -> 3      from whose -> whole dist: 1      to whole -> white dist: 2
+450
+write -> while dist: ∞ -> 2      from write -> white dist: 1      to white -> while dist: 1
+write -> whole dist: ∞ -> 3      from write -> white dist: 1      to white -> whole dist: 2
+write -> whose dist: ∞ -> 4      from write -> white dist: 1      to white -> whose dist: 3
+while -> write dist: ∞ -> 2      from while -> white dist: 1      to white -> write dist: 1
+whole -> write dist: ∞ -> 3      from whole -> white dist: 2      to white -> write dist: 1
+whose -> write dist: ∞ -> 4      from whose -> white dist: 3      to white -> write dist: 1
+460
+470
+480
+490
+500
+510
+520
+530
+540
+550
+560
+570
+580
+590
+600
+610
+620
+630
+640
+650
+660
+670
+680
+690
+700
+710
+720
+730
+740
+750
+760
+770
+780
+790
+800
+810
+820
+830
+840
+850
+860
+870
+880
+there -> write dist: ∞ -> 7      from there -> whose dist: 3      to whose -> write dist: 4
+there -> while dist: ∞ -> 5      from there -> whose dist: 3      to whose -> while dist: 2
+there -> whole dist: ∞ -> 4      from there -> whose dist: 3      to whose -> whole dist: 1
+there -> white dist: ∞ -> 6      from there -> whose dist: 3      to whose -> white dist: 3
+these -> write dist: ∞ -> 6      from these -> whose dist: 2      to whose -> write dist: 4
+these -> while dist: ∞ -> 4      from these -> whose dist: 2      to whose -> while dist: 2
+these -> whole dist: ∞ -> 3      from these -> whose dist: 2      to whose -> whole dist: 1
+these -> white dist: ∞ -> 5      from these -> whose dist: 2      to whose -> white dist: 3
+write -> there dist: ∞ -> 7      from write -> whose dist: 4      to whose -> there dist: 3
+write -> these dist: ∞ -> 6      from write -> whose dist: 4      to whose -> these dist: 2
+write -> where dist: ∞ -> 8      from write -> whose dist: 4      to whose -> where dist: 4
+write -> those dist: ∞ -> 5      from write -> whose dist: 4      to whose -> those dist: 1
+where -> write dist: ∞ -> 8      from where -> whose dist: 4      to whose -> write dist: 4
+where -> while dist: ∞ -> 6      from where -> whose dist: 4      to whose -> while dist: 2
+where -> whole dist: ∞ -> 5      from where -> whose dist: 4      to whose -> whole dist: 1
+where -> white dist: ∞ -> 7      from where -> whose dist: 4      to whose -> white dist: 3
+those -> write dist: ∞ -> 5      from those -> whose dist: 1      to whose -> write dist: 4
+those -> while dist: ∞ -> 3      from those -> whose dist: 1      to whose -> while dist: 2
+those -> whole dist: ∞ -> 2      from those -> whose dist: 1      to whose -> whole dist: 1
+those -> white dist: ∞ -> 4      from those -> whose dist: 1      to whose -> white dist: 3
+while -> there dist: ∞ -> 5      from while -> whose dist: 2      to whose -> there dist: 3
+while -> these dist: ∞ -> 4      from while -> whose dist: 2      to whose -> these dist: 2
+while -> where dist: ∞ -> 6      from while -> whose dist: 2      to whose -> where dist: 4
+while -> those dist: ∞ -> 3      from while -> whose dist: 2      to whose -> those dist: 1
+whole -> there dist: ∞ -> 4      from whole -> whose dist: 1      to whose -> there dist: 3
+whole -> these dist: ∞ -> 3      from whole -> whose dist: 1      to whose -> these dist: 2
+whole -> where dist: ∞ -> 5      from whole -> whose dist: 1      to whose -> where dist: 4
+whole -> those dist: ∞ -> 2      from whole -> whose dist: 1      to whose -> those dist: 1
+white -> there dist: ∞ -> 6      from white -> whose dist: 3      to whose -> there dist: 3
+white -> these dist: ∞ -> 5      from white -> whose dist: 3      to whose -> these dist: 2
+white -> where dist: ∞ -> 7      from white -> whose dist: 3      to whose -> where dist: 4
+white -> those dist: ∞ -> 4      from white -> whose dist: 3      to whose -> those dist: 1
+890
+900
+910
+920
+930
+940
+950
+960
+970
+980
+990
+0
+these -> there dist: 1
+write -> there dist: 7
+50
+where -> write dist: 8
+100
+150
+200
+250
+300
+350
+400
+450
+500
+550
+600
+650
+700
+750
+800
+850
+900
+950
+dist:8 where write
+(base) PatrickHume:WordJourney patrickhume$ ./journey white where
+----------------------
+Steps: 8
+----------------------
+0: white
+1: while
+2: whole
+3: whore
+4: where
+(base) PatrickHume:WordJourney patrickhume$ 
