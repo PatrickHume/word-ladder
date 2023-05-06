@@ -1,3 +1,4 @@
+#!/bin/bash
 # record number of aloof words
 counter=0
 # iterate over file
