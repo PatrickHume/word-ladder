@@ -1,4 +1,4 @@
-#include "hashset.h"    // a hashset providing .insert and .find
+#include "neighbours.h"    // a hashset providing .insert and .find
 #include <stdio.h>      // for printing
 #include <string.h>     // for strcpy
 // the length of the word

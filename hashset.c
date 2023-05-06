@@ -61,6 +61,16 @@ struct hashset* initialize_set (int size)
   return set;
 }
 
+void reset_cells(struct hashset* set){
+  for(int i = 0; i < set->size; i++){
+    set->cells[i].gCost = 0;
+    set->cells[i].fCost = 0;
+    set->cells[i].hCost = 0;
+    set->cells[i].opened = false;
+    set->cells[i].closed = false;
+  }
+}
+
 // Generate hash value by summation of char values
 int sum_hash(char* value, int size)
 {

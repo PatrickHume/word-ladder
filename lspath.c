@@ -53,10 +53,6 @@ int main(int argc, char *argv[])
         strcpy(allWords[lineNumber++],line);
     }
     fclose(file);
-    // output all words
-    //for(int y = 0; y < dictLength; y++){
-    //    printf("%s\n",allWords[y]);
-    //}
 
     // get the length of distance pairs
     int trueLength = dictLength*dictLength;
@@ -86,10 +82,10 @@ int main(int argc, char *argv[])
     // begin calculating longer distances
     for(int k = 0; k < dictLength; k++){
         // update user on progress
-        if(k%50 == 0){
+        if(k % (dictLength/20) == 0){
             end = clock();
             double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-            printf("%i%% time elapsed: %f seconds\n",(int)((k*100)/dictLength), time_spent);
+            printf("%i%% complete - time elapsed: %.1f seconds\n",(int)((k*100)/dictLength), time_spent);
             begin = clock();
         }
         // for each pair of words

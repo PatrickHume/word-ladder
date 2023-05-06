@@ -1,4 +1,6 @@
 // Giles Reger, 2019
+#ifndef HASHSET_H
+#define HASHSET_H
 
 #include <stdbool.h> 
 
@@ -15,6 +17,16 @@ typedef char* Value_Type;
 // Should be redefined if changing Value_Type
 int compare(Value_Type,Value_Type);
 
+typedef struct fast_cell
+{ // hash-table entry
+  int fCost;
+  bool opened;
+  bool closed;
+  int neighbours[30];
+  int numNeighbours;
+  int id;
+} fast_cell;
+
 // This is a cell struct assuming Open Addressing
 // You will need alternative data-structurs for separate chaining
 typedef struct cell
@@ -26,6 +38,9 @@ typedef struct cell
   int fCost;
   bool opened;
   bool closed;
+  int neighbours[30];
+  int numNeighbours;
+  int id;
 
   enum {empty, in_use, deleted} state;
   struct cell* chain;
@@ -37,7 +52,6 @@ struct  hashset
   cell *cells; 
   int size; // cell cells [table_size];
   int num_entries; // number of cells in_use
-  //TODO add anything else that you need
   int num_inserts;
   int initial_size;
   int num_finds;      // number of times find is called
@@ -53,7 +67,10 @@ struct hashset* insert (Value_Type, struct hashset*);
 
 bool find (Value_Type, struct hashset*);
 struct cell* get (Value_Type, struct hashset*);
+void reset_cells(struct hashset* set);
 
 // Helper functions
 void print_set (struct hashset*);
 void print_stats (struct hashset*);
+
+#endif
