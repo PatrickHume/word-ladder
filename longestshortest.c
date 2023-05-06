@@ -64,12 +64,7 @@ int main(int argc, char *argv[])
     unsigned char* allDistances = malloc(sizeof(unsigned char)*trueLength);
     check(allDistances);
     // populate array with distance pairs
-    printf("--------Initial Pass--------\n");
     for(int y = 0; y < dictLength; y++){
-        // update user on progress
-        if(y%50 == 0){
-            printf("%i \n",y);
-        }
         // populate with exact matches and neighbours
         for(int x = 0; x < dictLength; x++){
             if(x == y){
@@ -115,9 +110,6 @@ int main(int argc, char *argv[])
     greatestY = 0;
     // for each pair of values check the distance
     for(int y = 0; y < dictLength; y++){
-        if(y%50 == 0){
-            printf("%i\n",y);
-        }
         for(int x = 0; x < dictLength; x++){
             // skip unknown distances
             if(allDistances[m(x,y)] == (unsigned char)255){
