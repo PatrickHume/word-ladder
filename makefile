@@ -1,34 +1,37 @@
+CC = clang
+CFLAGS = -Wall -Wextra -Wpedantic
+
 all: journey lspath neighbours aloof
 
 journey: run.o hashset.o quicksort.o
-	clang run.o hashset.o quicksort.o -o journey
+	$(CC) $(CFLAGS) $^ -o $@
 
 run.o: run.c hashset.h quicksort.h
-	clang -c run.c -o run.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 hashset.o: hashset.c hashset.h global.h
-	clang -c hashset.c -o hashset.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 quicksort.o: quicksort.c quicksort.h hashset.h
-	clang -c quicksort.c -o quicksort.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 lspath: longestshortest.o
-	clang -Ofast longestshortest.o -o lspath
+	$(CC) $(CFLAGS) $^ -o $@
 
 longestshortest.o: longestshortest.c global.h
-	clang -Ofast -c longestshortest.c -o longestshortest.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 neighbours: neighbours.o hashset.o
-	clang -O3 neighbours.o hashset.o -o neighbours
+	$(CC) $(CFLAGS) $^ -o $@
 
 neighbours.o: neighbours.c hashset.h global.h
-	clang -O3 -c neighbours.c -o neighbours.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 aloof: aloof.o hashset.o
-	clang -O3 aloof.o hashset.o -o aloof
+	$(CC) $(CFLAGS) $^ -o $@
 
 aloof.o: aloof.c hashset.h global.h
-	clang -O3 -c aloof.c -o aloof.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf *.o journey
+	rm -rf *.o journey lspath neighbours aloof
