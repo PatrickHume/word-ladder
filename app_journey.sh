@@ -8,19 +8,13 @@ function ordinal () {
     *3) echo "$1"rd;;
   esac
 }
-# Take array and return items delimited with " and "
-function echo_array_with_delimiter {
-  local arr=("$@")  # store the array as a local variable
-  local last_index=$((${#arr[@]} - 1))  # calculate the index of the last element
 
-  # loop through each element of the array
-  for i in $(seq 0 $last_index); do
-    echo -n "${arr[$i]}"  # echo the current element
-    if [[ $i -lt $last_index ]]; then
-      echo -n " and "  # if this is not the last element, add the delimiter
-    fi
-  done
-  echo ""  # add a newline at the end
+# Join array elements by string
+function join_by {
+  local d=${1-} f=${2-}
+  if shift 2; then
+    printf %s "$f" "${@/#/$d}"
+  fi
 }
 
 # Get two words
@@ -61,8 +55,7 @@ done
 result=$(./journey $(printf ' %s' "${words[@]}") | tr '[:lower:]' '[:upper:]')
 # Output results
 clear
-echo -n "Showing shortest word ladder between "
-echo_array_with_delimiter "${words[@]^^}"
+echo "Showing shortest word ladder between $(join_by ' and ' ${words[@]^^})"
 echo "$result"
 read -n1 -p "Press any key to continue... "
 clear

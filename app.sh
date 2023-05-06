@@ -1,4 +1,50 @@
 #!/bin/bash
+# Array of required executables
+executables=("aloof" "journey" "lspath" "neighbours")
+
+# Check if each executable exists
+missing=()
+for file in "${executables[@]}"; do
+    if ! [ -x "$file" ]; then
+        missing+=("$file")
+    fi
+done
+
+# Join array elements by string
+function join_by {
+  local d=${1-} f=${2-}
+  if shift 2; then
+    printf %s "$f" "${@/#/$d}"
+  fi
+}
+
+# Report any missing files
+if [ ! ${#missing[@]} -eq 0 ]; then
+    echo "The following executables are missing: $(join_by ', ' ${missing[*]})"
+    read -p "Do you want to run make to build them? (y/n) " choice
+    if [ "$choice" == "y" ]; then
+        clear
+        make
+        # Check if make succeeded in creating all required executables
+        missing=()
+        for file in "${executables[@]}"; do
+        if ! [ -x "$file" ]; then
+            missing+=("$file")
+        fi
+        done
+        if [ ${#missing[@]} -eq 0 ]; then
+        echo "All required executables were successfully built!"
+        read -n1 -p "Press any key to continue... "
+        else
+        echo "Failed to build the following executables: $(join_by ', ' ${missing[*]})"
+        exit
+        fi
+    else
+        echo "Exiting app..."
+        exit
+    fi
+fi
+
 # Define menu options and state transitions
 options=("Connect words" "Word neighbours" "Aloof words" "Longest ladder")
 transitions=(1 2 3 4 q)
@@ -11,6 +57,7 @@ function longest_path() {
     echo "Press any key to continue..."
     read
 }
+
 # Loop until the user chooses to quit
 while true; do
     clear
