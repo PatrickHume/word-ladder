@@ -1,5 +1,4 @@
 #include "hashset.h"
-#include "quicksort.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -121,10 +120,19 @@ int main(int argc, char *argv[])
             failed = true;
             continue;
         }
-        // otherwise, sort the stach by fcost
-        quickSortIterative(openCells,0,openCellsLength-1);
-        // pick the cell from the top of the stack
-        currentCell = openCells[openCellsLength-1];
+        // otherwise pick next word
+        int minFCost = 5000;
+        int lowestIndex = 0;
+        currentCell = openCells[0];
+        for(int i = 0; i < openCellsLength; i++){
+            // i - 1 ?
+            if(openCells[i]->fCost < minFCost){
+                minFCost = openCells[i]->fCost;
+                lowestIndex = i;
+            }
+        }
+        currentCell = openCells[lowestIndex];
+        openCells[lowestIndex] = openCells[openCellsLength - 1];
     }
 
     // display the number of iterations during the search
