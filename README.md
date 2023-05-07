@@ -1,10 +1,10 @@
 # word-ladder
 
 ## 📙 Solving Word Ladders in C
-This repo contains a number of programs relating to 5-letter word ladders.
+<img src="https://github.com/PatrickHume/word-ladder/blob/master/cover_image.png?raw=true" width="480">
 
-### ❗ bash app.sh
-A bash app providing an interface to build and run all programs.
+### 🤖 bash app.sh
+This repo contains a bash app implementing a number of C programs relating to 5-letter word ladders.
 
 #### 🔧 Building and Running the Program
 After running make, the following four programs will be generated:
