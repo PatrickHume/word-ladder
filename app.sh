@@ -46,8 +46,8 @@ if [ ! ${#missing[@]} -eq 0 ]; then
 fi
 
 # Define menu options and state transitions
-options=("Connect words" "Word neighbours" "Aloof words" "Longest ladder")
-transitions=(1 2 3 4 q)
+options=("Connect words" "Word neighbours" "Aloof words" "Longest ladder" "Quit")
+transitions=(1 2 3 4 5)
 invalid_input=false
 selected=0
 clear
@@ -80,7 +80,7 @@ while true; do
             ;;
         $'\x1b[B') # down arrow
             ((selected++))
-            if [ $selected -ge ${#options[@]} ]; then
+            if [ $selected -gt ${#options[@]} ]; then
                 selected=0
             fi
             ;;
@@ -92,7 +92,7 @@ while true; do
                         bash app_journey.sh ;;
                     2)  
                         bash app_neighbours.sh ;;
-                     3)  
+                    3)  
                         clear
                         ./aloof | tr '[:lower:]' '[:upper:]'
                         read -n1 -p "Press any key to continue... " ;;
@@ -100,7 +100,7 @@ while true; do
                         clear
                         ./lspath_opt | tr '[:lower:]' '[:upper:]'
                         read -n1 -p "Press any key to continue... " ;;
-                    q)  
+                    5)  
                         clear 
                         break;;
                 esac
