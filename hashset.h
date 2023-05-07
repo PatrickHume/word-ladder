@@ -22,6 +22,7 @@ typedef struct fast_cell
   int fCost;
   bool opened;
   bool closed;
+  bool complete;
   int neighbours[30];
   int numNeighbours;
   int id;

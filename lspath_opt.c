@@ -6,24 +6,82 @@
 #include <time.h>
 #include "global.c"
 #include "hashset.h"
-#include "quicksort.h"
 
 // the length of the word
 const int wordLength = 5;
 // the length of the word with a newline
 const int wordLengthSpace = wordLength+1;
-
 // the length of the dictionary
 const unsigned int dictLength = 5757;
+// all cells used for dijkstra's algorithm
+fast_cell allCells[dictLength];
+int openCellIDs[dictLength];
 
-// maps two dictionary indicies to one index in the precalculated distances array
-int m(int x, int y){
-    if(x > y){
-        int temp = x;
-        x = y;
-        y = temp;
+// find furthest cell from cell at current_i using dijkstra's algorithm
+int get_furthest_from(int current_i){
+    int openCellsLength;
+    bool finished;
+    // initialise cells
+    for(int k = 0; k < dictLength; k++){
+        allCells[k].closed      = false;
+        allCells[k].opened      = false;
+        allCells[k].fCost       = 0;
     }
-    return (y*dictLength) + x;
+    // find word with most unknown reachables
+    openCellsLength = 1;
+    // run until finished
+    finished = false;
+    // perform dijkstra search
+    while(!finished){
+        // close and complete cell
+        allCells[current_i].closed = true;
+        allCells[current_i].complete = true;
+        // remove currentCell from open cells
+        openCellsLength--;
+        // loop over each neighbour
+        for(int i = 0; i < allCells[current_i].numNeighbours; i++){
+            // evaluate new word and add to openCells
+            openCellIDs[openCellsLength] = allCells[current_i].neighbours[i];
+            // skip cell if closed
+            if(allCells[openCellIDs[openCellsLength]].closed){
+                continue;
+            }
+            bool parentSet = false;
+            // if cell is open:
+            if(allCells[openCellIDs[openCellsLength]].opened){
+                // update the cost and parent word if a lower cost is found
+                if(allCells[current_i].fCost + 1 < allCells[openCellIDs[openCellsLength]].fCost){
+                    allCells[openCellIDs[openCellsLength]].fCost = allCells[current_i].fCost + 1;
+                }
+            // if the cell is neither open nor closed: it is undiscovered
+            }else{
+                // set cell as opened and update costs and parent
+                allCells[openCellIDs[openCellsLength]].opened = true;
+                allCells[openCellIDs[openCellsLength]].fCost = allCells[current_i].fCost + 1;
+                // update distance matrix
+                openCellsLength++;
+            }
+        }
+        // if no cells left, checking furthest word on island
+        if(openCellsLength == 0){
+            finished = true;
+            continue;
+        }
+        // otherwise pick next word with lowest fCost
+        int minFCost = 5000;
+        int lowestIndex = 0;
+        current_i = allCells[openCellIDs[0]].id;
+        for(int i = 0; i < openCellsLength; i++){
+            if(allCells[openCellIDs[i]].fCost < minFCost){
+                minFCost = allCells[openCellIDs[i]].fCost;
+                lowestIndex = i;
+            }
+        }
+        current_i = allCells[openCellIDs[lowestIndex]].id;
+        openCellIDs[lowestIndex] = openCellIDs[openCellsLength - 1];
+    }
+    // return last cell closed
+    return current_i;
 }
 
 // finds the longest shortest word ladder
@@ -32,7 +90,6 @@ int main(int argc, char *argv[])
     // an array containing all words from the text file
     struct hashset* wordSet = initialize_set(12000);
     char allWords[6000][wordLengthSpace];
-    fast_cell allCells[6000];
     int allWordsLength = 0;
     // open dictionary file and write all words to the hashset
     FILE* file = fopen("allWords.txt", "r");
@@ -51,32 +108,15 @@ int main(int argc, char *argv[])
     }
     // close the dictionary file
     fclose(file);
-    
+
+    // variables for identifying neighbours
     char currentWord[wordLengthSpace];
     char newWord[wordLengthSpace];
-    int openCellIDs[6000];
-    struct fast_cell currentCell;
-
-    int aloofWordsLength = 0;
-    int numNeighbours = 0;
-    int maxNeighbours = 0;
     int neighbourIndex = 0;
-
-    // get the length of distance pairs
-    int trueLength = dictLength*dictLength;
-
-    // array to hold precalculated distance pairs
-    unsigned char* allDistances = malloc(sizeof(unsigned char)*trueLength);
-    check(allDistances);
-    for(int i = 0; i < allWordsLength; i++){
-        for(int j = 0; j < allWordsLength; j++){
-            allDistances[m(i,j)] = 0;
-        }
-    }
 
     // initialise all word ids
     for(int k = 0; k < allWordsLength; k++){
-        // initialise word
+        // initialise hashset and cells
         get(allWords[k], wordSet)->id = k;
         allCells[k].id = k;
     }
@@ -85,7 +125,6 @@ int main(int argc, char *argv[])
     for(int k = 0; k < allWordsLength; k++){
         // initialise word
         strcpy(currentWord, allWords[k]);
-        numNeighbours = 0;
         neighbourIndex = 0;
         // loop over each letter
         for(int i = 0; i < wordLength; i++){
@@ -97,118 +136,56 @@ int main(int argc, char *argv[])
                 // if new word is invalid, skip
                 if(!find(newWord, wordSet)){continue;}
                 // otherwise, word has neighbours
-                allCells[k].neighbours[neighbourIndex++] = get(newWord, wordSet)->id;
-                numNeighbours++;
+                int id = get(newWord, wordSet)->id;
+                // append neighbour id to array
+                allCells[k].neighbours[neighbourIndex++] = id;
             }
         }
-        allCells[k].numNeighbours = numNeighbours;
-        maxNeighbours = numNeighbours > maxNeighbours ? numNeighbours : maxNeighbours;
+        // record num neighbours
+        allCells[k].numNeighbours = neighbourIndex;
     }
-    printf("maxNeighbours: %i\n",maxNeighbours);
 
-    /* here, do your time-consuming job */
-    clock_t begin = clock();
-    clock_t end;
+    // initialise cells
+    for(int k = 0; k < allWordsLength; k++){
+        allCells[k].complete    = false;
+    }
 
-    // for each word, dijkstra search to all neighbours
-    int openCellsLength;
-    bool finished;
-    for(int start_i = 0; start_i < dictLength; start_i++){
+    // record max dist values
+    int max_dist = 0;
+    int max_dist_start_i;
+    int max_dist_end_i;
 
-        if(start_i % (dictLength/20) == 0){
-            end = clock();
-            double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-            printf("%i%% complete - time elapsed: %.1f seconds\n",(int)((start_i*100)/dictLength), time_spent);
-            begin = clock();
-        }
-    
-        // initialise word
-        for(int k = 0; k < allWordsLength; k++){
-            allCells[k].closed = false;
-            allCells[k].opened = false;
-            allCells[k].fCost  = 0;
-        }
-
-        openCellsLength = 1;
-        finished = false;
-
-        int current_i = start_i;
-        // perform dijkstra search
-        while(!finished){
-            // take lowest fCost from open cells
-            allCells[current_i].closed = true;
-            // loop over visisted cells and update distances
-            allDistances[m(start_i, current_i)] = allCells[current_i].fCost;
-            // remove currentCell from open cells
-            openCellsLength--;
-
-            // loop over each neighbour
-            for(int i = 0; i < allCells[current_i].numNeighbours; i++){
-                // evaluate new word and add to openCells
-                openCellIDs[openCellsLength] = allCells[current_i].neighbours[i];
-                // skip cell if closed
-                if(allCells[openCellIDs[openCellsLength]].closed){
-                    continue;
-                }
-                // if cell is open:
-                if(allCells[openCellIDs[openCellsLength]].opened){
-                    // update the cost and parent word if a lower cost is found
-                    if(allCells[current_i].fCost + 1 < allCells[openCellIDs[openCellsLength]].fCost){
-                        allCells[openCellIDs[openCellsLength]].fCost = allCells[current_i].fCost + 1;
-                    }
-                // if the cell is neither open nor closed: it is undiscovered
-                }else{
-                    // set cell as opened and update costs and parent
-                    allCells[openCellIDs[openCellsLength]].opened = true;
-                    allCells[openCellIDs[openCellsLength]].fCost = allCells[current_i].fCost + 1;
-                    openCellsLength++;
-                }
+    // search for longest shortest path
+    while(true){
+        int init_i;
+        // find an untraversed cell
+        bool found = false;
+        for(int i = 0; i < dictLength; i++){
+            if(!allCells[i].complete && allCells[i].numNeighbours != 0){
+                init_i = i;
+                found = true;
             }
-            // if no cells left, end the search
-            if(openCellsLength == 0){
-                finished = true;
-                continue;
-            }
-            // printf("before");
-            // for(int a = 0; a < openCellsLength; a++){
-            //     printf("%i: %i->%i\n",a,openCellIDs[a],allCells[openCellIDs[a]].fCost);
-            // }
-            // otherwise, sort the stach by fcost
-            quickSortCellIDs(allCells, openCellIDs, 0, openCellsLength-1);
-            // printf("after");
-            // for(int a = 0; a < openCellsLength; a++){
-            //     printf("%i: %i->%i\n",a,openCellIDs[a],allCells[openCellIDs[a]].fCost);
-            // }
-            // pick the cell from the top of the stack
-            current_i = allCells[openCellIDs[openCellsLength-1]].id;
+        }
+        // exit if all cells traversed or cell is aloof word
+        if(!found){
+            break;
+        }
+        // find cell furthest from some point
+        int start_i = get_furthest_from(init_i);
+        // find cell and to opposite end
+        int end_i = get_furthest_from(start_i);
+        // check if dist is longest so far
+        if(allCells[end_i].fCost > max_dist){
+            max_dist_start_i    = start_i;
+            max_dist_end_i      = end_i;
+            max_dist = allCells[end_i].fCost;
         }
     }
 
-    // begin searching for the longest shortest path
-    int greatestDist, greatestX, greatestY;
-    greatestDist = 0;
-    greatestX = 0;
-    greatestY = 0;
-    // for each pair of values check the distance
-    for(int y = 0; y < dictLength; y++){
-        for(int x = 0; x < dictLength; x++){
-            // skip unknown distances
-            if(allDistances[m(x,y)] == (unsigned char)255){
-                continue;
-            }
-            // if a greater distance is found, update the max dist
-            if(allDistances[m(x,y)] > greatestDist){
-                greatestDist = allDistances[m(x,y)];
-                greatestX = x;
-                greatestY = y;
-            }
-            //printf("%s -> %s dist: %i\n",allWords[x],allWords[y],allDistances[m(x,y)]);
-        }
-    }
-    // display the words furthest apart
-    printf("dist:%i %s %s\n",greatestDist,allWords[greatestX],allWords[greatestY]);
+    // display the max dist
+    printf("Longest word ladder: %s -> %s (%i steps)\n",allWords[max_dist_start_i], allWords[max_dist_end_i], max_dist);
+
     // free the memory
-    free(allDistances);
     tidy(wordSet);
     return 0;
 }
