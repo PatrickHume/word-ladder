@@ -49,40 +49,69 @@ fi
 options=("Connect words" "Word neighbours" "Aloof words" "Longest ladder")
 transitions=(1 2 3 4 q)
 invalid_input=false
-
+selected=0
+clear
 # Loop until the user chooses to quit
 while true; do
-    clear
+    tput cup 0 0
+
     echo "Word Ladder App"
     echo "---------------"
     for i in "${!options[@]}"; do
-        echo "$((i+1)). ${options[$i]}"
+        if [ $i -eq $selected ]; then
+            tput setaf 202 # set foreground color to bright orange
+            printf "%s\n" "${options[$i]} <"
+            tput sgr0 # reset terminal color
+        else
+            printf "%s\n" "${options[$i]}  "
+        fi
     done
-    if $invalid_input 
-    then
-        echo "Invalid option."
+    if $invalid_input; then
+        printf "Invalid option."
     fi
-    read -p "Choose a number or enter q to quit: " choice
-    if [[ " ${transitions[@]} " =~ " $choice " ]]; then
-        case $choice in
-            1)  
-                bash app_journey.sh ;;
-            2)  
-                bash app_neighbours.sh ;;
-            3)  
+    
+    read -rsn3 input
+    case "$input" in
+        $'\x1b[A') # up arrow
+            ((selected--))
+            if [ $selected -lt 0 ]; then
+                selected=$((${#options[@]}-1))
+            fi
+            ;;
+        $'\x1b[B') # down arrow
+            ((selected++))
+            if [ $selected -ge ${#options[@]} ]; then
+                selected=0
+            fi
+            ;;
+        $'') # enter key
+            choice=$((${transitions[$selected]}))
+            if [ $choice -eq $choice ] 2>/dev/null; then
+                case $choice in
+                    1)  
+                        bash app_journey.sh ;;
+                    2)  
+                        bash app_neighbours.sh ;;
+                     3)  
+                        clear
+                        ./aloof | tr '[:lower:]' '[:upper:]'
+                        read -n1 -p "Press any key to continue... " ;;
+                    4)  
+                        clear
+                        ./lspath_opt | tr '[:lower:]' '[:upper:]'
+                        read -n1 -p "Press any key to continue... " ;;
+                    q)  
+                        clear 
+                        break;;
+                esac
                 clear
-                ./aloof | tr '[:lower:]' '[:upper:]'
-                read -n1 -p "Press any key to continue... " ;;
-            4)  
-                clear
-                ./lspath_opt | tr '[:lower:]' '[:upper:]'
-                read -n1 -p "Press any key to continue... " ;;
-            q)  
-                clear 
-                break;;
-        esac
-        invalid_input=false
-    else
-        invalid_input=true
-    fi
+                invalid_input=false
+            else
+                invalid_input=true
+            fi
+            ;;
+        *)
+            invalid_input=true
+            ;;
+    esac
 done
