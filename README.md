@@ -6,6 +6,8 @@
 ### 🤖 bash app.sh
 This repo contains a bash app implementing a number of C programs relating to 5-letter word ladders.
 
+Read about it [here.](https://patrickhume.vercel.app/word-ladder)
+
 #### 🔧 Building and Running the Program
 After running make, the following four programs will be generated:
 - **./journey {word} {word}** *where A and B are 5-letter words.*
