@@ -1,6 +1,6 @@
 #!/bin/bash
 # Array of required executables
-executables=("aloof" "journey" "lspath" "neighbours")
+executables=("aloof" "journey" "lspath" "lspath_opt" "neighbours")
 
 # Check if each executable exists
 missing=()
@@ -49,14 +49,6 @@ fi
 options=("Connect words" "Word neighbours" "Aloof words" "Longest ladder")
 transitions=(1 2 3 4 q)
 invalid_input=false
-function longest_path() {
-    clear
-    echo "Note that this program takes a while to run."
-    read -n1 -p "Press 'r' to return or press any key to continue... " input && [ "$input" = "r" ] && return
-    ./lspath 
-    echo "Press any key to continue..."
-    read
-}
 
 # Loop until the user chooses to quit
 while true; do
@@ -82,7 +74,9 @@ while true; do
                 ./aloof | tr '[:lower:]' '[:upper:]'
                 read -n1 -p "Press any key to continue... " ;;
             4)  
-                longest_path ;;
+                clear
+                ./lspath_opt | tr '[:lower:]' '[:upper:]'
+                read -n1 -p "Press any key to continue... " ;;
             q)  
                 clear 
                 break;;
